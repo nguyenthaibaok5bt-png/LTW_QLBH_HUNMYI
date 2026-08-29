@@ -1,0 +1,210 @@
+﻿@model LTW_QLBH_HUNMYI.Models.HOADON_BAN
+@{
+    ViewBag.Title = "Đặt hàng thành công";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <!-- Success Message -->
+        <div class="text-center mb-4">
+            <div class="success-icon mb-4">
+                <i class="fas fa-check-circle fa-5x text-success"></i>
+            </div>
+            <h2 class="text-success mb-3">Đặt hàng thành công!</h2>
+            <p class="lead text-muted">Cảm ơn bạn đã mua hàng tại Hunmyi Shop</p>
+        </div>
+
+        <!-- Order Info Card -->
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-file-invoice"></i> Thông tin đơn hàng
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <p class="mb-2">
+                            <strong><i class="fas fa-hashtag text-muted"></i> Mã đơn hàng:</strong>
+                            <br>
+                            <span class="h5 text-primary">@Model.MAHD_BAN</span>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="mb-2">
+                            <strong><i class="fas fa-calendar text-muted"></i> Ngày đặt:</strong>
+                            <br>
+                            @Model.NGAYLAP
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <p class="mb-2">
+                            <strong><i class="fas fa-clipboard-list text-muted"></i> Trạng thái:</strong>
+                            <span class="badge bg-warning text-dark ms-2">@Model.TRANGTHAI</span>
+                        </p>
+                    </div>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.GHICHU))
+                {
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="mb-0">
+                                <strong><i class="fas fa-sticky-note text-muted"></i> Ghi chú:</strong>
+                                <br>
+                                <span class="text-muted">@Model.GHICHU</span>
+                            </p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Order Items -->
+        <div class="card mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="fas fa-box"></i> Chi tiết đơn hàng</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Sản phẩm</th>
+                                <th class="text-center">Số lượng</th>
+                                <th class="text-end">Đơn giá</th>
+                                <th class="text-end">Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.CTHD_BAN)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            @if (!string.IsNullOrEmpty(item.SANPHAM.HINHANH))
+                                            {
+                                                <img src="@Url.Content("~/Content/Images/Products/" + item.SANPHAM.HINHANH)"
+                                                     alt="@item.SANPHAM.TENSP"
+                                                     style="width: 50px; height: 50px; object-fit: cover;"
+                                                     class="rounded me-3"
+                                                     onerror="this.src='@Url.Content("~/Content/Images/no-image.jpg")'">
+                                            }
+                                            <div>
+                                                <strong>@item.SANPHAM.TENSP</strong>
+                                                <br>
+                                                <small class="text-muted">@item.MASP</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-secondary">@item.SOLUONG</span>
+                                    </td>
+                                    <td class="text-end">
+                                        @String.Format("{0:N0}", item.DONGIA)đ
+                                    </td>
+                                    <td class="text-end">
+                                        <strong class="text-danger">
+                                            @String.Format("{0:N0}", item.THANHTIEN)đ
+                                        </strong>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot class="table-light">
+                            <tr>
+                                <td colspan="3" class="text-end">
+                                    <strong>Tạm tính:</strong>
+                                </td>
+                                <td class="text-end">
+                                    <strong>@String.Format("{0:N0}", Model.TONGTIEN)đ</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="text-end">
+                                    <strong>Phí vận chuyển:</strong>
+                                </td>
+                                <td class="text-end">
+                                    <strong class="text-success">Miễn phí</strong>
+                                </td>
+                            </tr>
+                            <tr class="table-info">
+                                <td colspan="3" class="text-end">
+                                    <h5 class="mb-0">Tổng cộng:</h5>
+                                </td>
+                                <td class="text-end">
+                                    <h5 class="mb-0 text-danger">
+                                        @String.Format("{0:N0}", Model.TONGTIEN)đ
+                                    </h5>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Next Steps -->
+        <div class="card mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="fas fa-info-circle"></i> Thông tin quan trọng</h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info mb-3">
+                    <i class="fas fa-bell"></i>
+                    <strong>Thông báo:</strong> Chúng tôi đã nhận được đơn hàng của bạn và đang xử lý.
+                    Bạn sẽ nhận được email xác nhận sớm nhất.
+                </div>
+
+                <h6 class="mb-3">Các bước tiếp theo:</h6>
+                <ol class="mb-3">
+                    <li class="mb-2">
+                        <strong>Xác nhận đơn hàng:</strong> Chúng tôi sẽ liên hệ để xác nhận đơn hàng trong vòng 24h
+                    </li>
+                    <li class="mb-2">
+                        <strong>Chuẩn bị hàng:</strong> Đơn hàng sẽ được chuẩn bị và đóng gói cẩn thận
+                    </li>
+                    <li class="mb-2">
+                        <strong>Giao hàng:</strong> Đơn hàng sẽ được giao trong vòng 2-3 ngày làm việc
+                    </li>
+                    <li class="mb-2">
+                        <strong>Thanh toán:</strong> Thanh toán khi nhận hàng (COD)
+                    </li>
+                </ol>
+
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>Lưu ý:</strong> Bạn có thể hủy đơn hàng miễn phí khi đơn hàng đang ở trạng thái "Chờ xử lý"
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="text-center">
+            <a href="@Url.Action("OrderDetail", "Customer", new { id = Model.MAHD_BAN })"
+               class="btn btn-primary btn-lg mb-2">
+                <i class="fas fa-eye"></i> Xem chi tiết đơn hàng
+            </a>
+            <a href="@Url.Action("Orders", "Customer")"
+               class="btn btn-outline-primary btn-lg mb-2">
+                <i class="fas fa-list"></i> Đơn hàng của tôi
+            </a>
+            <a href="@Url.Action("Products", "Customer")"
+               class="btn btn-outline-secondary btn-lg mb-2">
+                <i class="fas fa-shopping-bag"></i> Tiếp tục mua sắm
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+.success-icon {
+    animation: scaleIn 0.5s ease-out;
+}
+
+
+</style>

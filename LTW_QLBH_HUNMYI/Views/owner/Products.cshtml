@@ -1,0 +1,117 @@
+﻿@model IEnumerable<LTW_QLBH_HUNMYI.Models.SANPHAM>
+
+@{
+    ViewBag.Title = "Quản lý sản phẩm";
+    Layout = "~/Views/Shared/_LayoutOwner.cshtml";
+}
+
+<h3 class="mb-3">📦 Quản lý sản phẩm</h3>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<div class="card p-3 mb-3 shadow-sm">
+    @using (Html.BeginForm("Products", "Owner", FormMethod.Get))
+    {
+        <div class="row">
+            <div class="col-md-4">
+                @Html.DropDownList(
+                    "madm",
+                    (SelectList)ViewBag.DanhMucList,
+                    "-- Tất cả danh mục --",
+                    new { @class = "form-control", onchange = "this.form.submit();" }
+                )
+            </div>
+
+            <div class="col-md-4">
+                <a href="@Url.Action("CreateProduct")" class="btn btn-success">
+                    ➕ Thêm sản phẩm
+                </a>
+            </div>
+        </div>
+    }
+</div>
+
+<table class="table table-bordered table-hover align-middle text-center">
+    <thead class="table-dark">
+        <tr>
+            <th>Mã SP</th>
+            <th>Hình ảnh</th>
+            <th>Tên sản phẩm</th>
+            <th>Danh mục</th>
+            <th>Giá</th>
+            <th>Tồn kho</th>
+            <th>Trạng thái</th>
+            <th width="160">Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MASP</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.HINHANH))
+                    {
+                        <img src="~/Content/Images/Products/@item.HINHANH"
+                             width="60" height="60" style="object-fit:cover" />
+                    }
+                </td>
+                <td>@item.TENSP</td>
+                <td>@item.DANHMUC.TENDM</td>
+                <td>@String.Format("{0:N0} ₫", item.GIA)</td>
+                <td>@item.SOLUONGTON</td>
+                <td>
+                    @if (item.TRANGTHAI == "Đang bán")
+                    {
+                        <span class="badge bg-success">@item.TRANGTHAI</span>
+                    }
+                    else if (item.TRANGTHAI == "Hết hàng")
+                    {
+                        <span class="badge bg-danger">@item.TRANGTHAI</span>
+                    }
+                    else if (item.TRANGTHAI == "Ngừng bán")
+                    {
+                        <span class="badge bg-warning text-dark">@item.TRANGTHAI</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">@item.TRANGTHAI</span>
+                    }
+                </td>
+                <td>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-cog"></i> Thao tác
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item" href="@Url.Action("EditProduct", new { id = item.MASP })">
+                                    <i class="fas fa-edit text-warning"></i> Chỉnh sửa
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="@Url.Action("StopSelling", "Owner", new { id = item.MASP })">
+                                    <i class="fas fa-pause-circle text-warning"></i> Ngừng bán
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="@Url.Action("DeleteProduct", "Owner", new { id = item.MASP })">
+                                    <i class="fas fa-trash-alt"></i> Xóa vĩnh viễn
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

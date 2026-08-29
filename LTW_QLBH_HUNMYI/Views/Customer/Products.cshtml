@@ -1,0 +1,216 @@
+﻿@model List<LTW_QLBH_HUNMYI.Models.SANPHAM>
+@{
+    ViewBag.Title = "Sản phẩm";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+}
+
+<div class="row">
+    <!-- Sidebar Filter -->
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-filter"></i> Bộ lọc</h5>
+            </div>
+            <div class="card-body">
+                <!-- Danh mục -->
+                <h6 class="mb-3">Danh mục</h6>
+                <div class="list-group mb-4">
+                    <a href="@Url.Action("Products", "Customer")"
+                       class="list-group-item list-group-item-action @(string.IsNullOrEmpty(ViewBag.SelectedCategory) ? "active" : "")">
+                        Tất cả sản phẩm
+                    </a>
+                    @if (ViewBag.Categories != null)
+                    {
+                        foreach (var cat in ViewBag.Categories)
+                        {
+                            <a href="@Url.Action("Products", "Customer", new { category = cat.MADM })"
+                               class="list-group-item list-group-item-action @(ViewBag.SelectedCategory == cat.MADM ? "active" : "")">
+                                @cat.TENDM
+                            </a>
+                        }
+                    }
+                </div>
+
+                <!-- Sắp xếp -->
+                <h6 class="mb-3">Sắp xếp theo</h6>
+                <select class="form-select" id="sortBy" onchange="applySortFilter()">
+                    <option value="newest" @(ViewBag.SortBy == "newest" ? "selected" : "")>Mới nhất</option>
+                    <option value="price_asc" @(ViewBag.SortBy == "price_asc" ? "selected" : "")>Giá: Thấp đến cao</option>
+                    <option value="price_desc" @(ViewBag.SortBy == "price_desc" ? "selected" : "")>Giá: Cao đến thấp</option>
+                    <option value="name_asc" @(ViewBag.SortBy == "name_asc" ? "selected" : "")>Tên: A-Z</option>
+                    <option value="name_desc" @(ViewBag.SortBy == "name_desc" ? "selected" : "")>Tên: Z-A</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="col-md-9">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="@Url.Action("Index", "Customer")">Trang chủ</a></li>
+                <li class="breadcrumb-item active">
+                    @if (!string.IsNullOrEmpty(ViewBag.CategoryName))
+                    {
+                        @ViewBag.CategoryName
+                    }
+                    else if (!string.IsNullOrEmpty(ViewBag.SearchKeyword))
+                    {
+                        <text>Kết quả tìm kiếm: "@ViewBag.SearchKeyword"</text>
+                    }
+                    else
+                    {
+                        <text>Tất cả sản phẩm</text>
+                    }
+                </li>
+            </ol>
+        </nav>
+
+        <!-- Products Header -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="mb-0">
+                @if (!string.IsNullOrEmpty(ViewBag.CategoryName))
+                {
+                    @ViewBag.CategoryName
+                }
+                else if (!string.IsNullOrEmpty(ViewBag.SearchKeyword))
+                {
+                    <text>Kết quả tìm kiếm</text>
+                }
+                else
+                {
+                    <text>Tất cả sản phẩm</text>
+                }
+                <small class="text-muted">(@(Model?.Count ?? 0) sản phẩm)</small>
+            </h4>
+        </div>
+
+        <!-- Products List -->
+        @if (Model != null && Model.Count > 0)
+        {
+            <div class="row g-4">
+                @foreach (var product in Model)
+                {
+                    <div class="col-md-4">
+                        <div class="product-card h-100">
+                            <!-- Product Image -->
+                            <a href="@Url.Action("ProductDetail", "Customer", new { id = product.MASP })">
+                                @if (!string.IsNullOrEmpty(product.HINHANH))
+                                {
+                                    <img src="@Url.Content("~/Content/Images/Products/" + product.HINHANH)"
+                                         class="product-image" alt="@product.TENSP"
+                                         onerror="this.src='@Url.Content("~/Content/Images/Product/no-image.jpg")'">
+                                }
+                                else
+                                {
+                                    <div class="product-image d-flex align-items-center justify-content-center bg-light">
+                                        <i class="fas fa-image fa-3x text-muted"></i>
+                                    </div>
+                                }
+                            </a>
+
+                            <!-- Product Info -->
+                            <div class="p-3">
+                                <!-- Category Badge -->
+                                <span class="badge bg-secondary mb-2">@product.DANHMUC.TENDM</span>
+
+                                <!-- Product Name -->
+                                <h6 class="mb-2">
+                                    <a href="@Url.Action("ProductDetail", "Customer", new { id = product.MASP })"
+                                       class="text-decoration-none text-dark">
+                                        @product.TENSP
+                                    </a>
+                                </h6>
+
+                                <!-- Product Description -->
+                                @if (!string.IsNullOrEmpty(product.MOTA))
+                                {
+                                    <p class="text-muted small mb-2" style="height: 40px; overflow: hidden;">
+                                        @(product.MOTA.Length > 60 ? product.MOTA.Substring(0, 60) + "..." : product.MOTA)
+                                    </p>
+                                }
+
+                                <!-- Price and Actions -->
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="text-danger fw-bold fs-5">
+                                        @String.Format("{0:N0}", product.GIA)đ
+                                    </span>
+                                    @if (product.SOLUONGTON > 0)
+                                    {
+                                        <button class="btn btn-sm btn-primary"
+                                                onclick="addToCart('@product.MASP', 1)">
+                                            <i class="fas fa-cart-plus"></i> Thêm
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-sm btn-secondary" disabled>
+                                            <i class="fas fa-times"></i> Hết hàng
+                                        </button>
+                                    }
+                                </div>
+
+                                <!-- Stock Info -->
+                                <small class="text-muted">
+                                    <i class="fas fa-box"></i>
+                                    @if (product.SOLUONGTON > 0)
+                                    {
+                                        <span>Còn @product.SOLUONGTON sản phẩm</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-danger">Hết hàng</span>
+                                    }
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <i class="fas fa-inbox fa-5x text-muted mb-3"></i>
+                <h4 class="text-muted">Không tìm thấy sản phẩm nào</h4>
+                <p class="text-muted">Vui lòng thử tìm kiếm với từ khóa khác hoặc xem các sản phẩm khác</p>
+                <a href="@Url.Action("Products", "Customer")" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i> Xem tất cả sản phẩm
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+@section scripts {
+    <script>
+function addToCart(productId, quantity) {
+    $.ajax({
+        url: '@Url.Action("AddToCart", "Customer")',
+        type: 'POST',
+        data: { productId: productId, quantity: quantity },
+        success: function(response) {
+            if (response.success) {
+                // Show success message
+                alert(response.message);
+                // Update cart count
+                $('#cartCount').text(response.cartCount);
+            } else {
+                alert(response.message);
+            }
+        },
+        error: function() {
+            alert('Có lỗi xảy ra!');
+        }
+    });
+}
+
+function applySortFilter() {
+    var sortBy = $('#sortBy').val();
+    var currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set('sortBy', sortBy);
+    window.location.href = currentUrl.toString();
+}
+    </script>
+}

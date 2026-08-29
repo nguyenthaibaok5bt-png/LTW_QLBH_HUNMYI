@@ -1,0 +1,181 @@
+﻿@model List<LTW_QLBH_HUNMYI.Models.HOADON_BAN>
+@{
+    ViewBag.Title = "Đơn hàng của tôi";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+}
+
+<h2 class="mb-4">
+    <i class="fas fa-shopping-bag"></i> Đơn hàng của tôi
+</h2>
+
+<!-- Order Filter Tabs -->
+<ul class="nav nav-pills mb-4">
+    <li class="nav-item">
+        <a class="nav-link @(string.IsNullOrEmpty(ViewBag.SelectedStatus) ? "active" : "")"
+           href="@Url.Action("Orders", "Customer")">
+            Tất cả (@(ViewBag.PendingCount + ViewBag.ProcessingCount + ViewBag.CompletedCount + ViewBag.CancelledCount))
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(ViewBag.SelectedStatus == "Chờ xử lý" ? "active" : "")"
+           href="@Url.Action("Orders", "Customer", new { status = "Chờ xử lý" })">
+            <i class="fas fa-clock"></i> Chờ xử lý (@ViewBag.PendingCount)
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(ViewBag.SelectedStatus == "Đang xử lý" ? "active" : "")"
+           href="@Url.Action("Orders", "Customer", new { status = "Đang xử lý" })">
+            <i class="fas fa-spinner"></i> Đang xử lý (@ViewBag.ProcessingCount)
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(ViewBag.SelectedStatus == "Hoàn thành" ? "active" : "")"
+           href="@Url.Action("Orders", "Customer", new { status = "Hoàn thành" })">
+            <i class="fas fa-check-circle"></i> Hoàn thành (@ViewBag.CompletedCount)
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(ViewBag.SelectedStatus == "Đã hủy" ? "active" : "")"
+           href="@Url.Action("Orders", "Customer", new { status = "Đã hủy" })">
+            <i class="fas fa-times-circle"></i> Đã hủy (@ViewBag.CancelledCount)
+        </a>
+    </li>
+</ul>
+
+<!-- Orders List -->
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var order in Model)
+    {
+        string badgeClass = "";
+        string iconClass = "";
+
+        switch (order.TRANGTHAI)
+        {
+            case "Chờ xử lý":
+                badgeClass = "bg-warning text-dark";
+                iconClass = "fa-clock";
+                break;
+            case "Đang xử lý":
+                badgeClass = "bg-info";
+                iconClass = "fa-spinner";
+                break;
+            case "Hoàn thành":
+                badgeClass = "bg-success";
+                iconClass = "fa-check-circle";
+                break;
+            case "Đã hủy":
+                badgeClass = "bg-danger";
+                iconClass = "fa-times-circle";
+                break;
+        }
+
+        <div class="card mb-3">
+            <div class="card-header bg-white">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h6 class="mb-0">
+                            <i class="fas fa-hashtag"></i> Đơn hàng: <strong>@order.MAHD_BAN</strong>
+                        </h6>
+                        <small class="text-muted">
+                            <i class="fas fa-calendar"></i>
+                            Ngày đặt: @order.NGAYLAP
+                        </small>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <span class="badge @badgeClass">
+                            <i class="fas @iconClass"></i> @order.TRANGTHAI
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <p class="mb-1">
+                            <i class="fas fa-box"></i>
+                            <strong>Tổng tiền:</strong>
+                            <span class="text-danger fw-bold">@String.Format("{0:N0}", order.TONGTIEN)đ</span>
+                        </p>
+                        @if (!string.IsNullOrEmpty(order.GHICHU))
+                        {
+                            <p class="mb-0 text-muted small">
+                                <i class="fas fa-sticky-note"></i> @order.GHICHU
+                            </p>
+                        }
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <a href="@Url.Action("OrderDetail", "Customer", new { id = order.MAHD_BAN })"
+                           class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-eye"></i> Xem chi tiết
+                        </a>
+
+                        @if (order.TRANGTHAI == "Chờ xử lý")
+                        {
+                            <button class="btn btn-sm btn-outline-danger"
+                                    onclick="cancelOrder('@order.MAHD_BAN')">
+                                <i class="fas fa-times"></i> Hủy đơn
+                            </button>
+                        }
+
+                        @if (order.TRANGTHAI == "Hoàn thành")
+                        {
+                            <button class="btn btn-sm btn-success" disabled>
+                                <i class="fas fa-star"></i> Đánh giá
+                            </button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="card">
+        <div class="card-body text-center py-5">
+            <i class="fas fa-shopping-bag fa-5x text-muted mb-4"></i>
+            <h4 class="text-muted">Chưa có đơn hàng nào</h4>
+            <p class="text-muted mb-4">
+                @if (!string.IsNullOrEmpty(ViewBag.SelectedStatus))
+                {
+                    <text>Bạn chưa có đơn hàng nào ở trạng thái "@ViewBag.SelectedStatus"</text>
+                }
+                else
+                {
+                    <text>Bạn chưa đặt đơn hàng nào. Hãy bắt đầu mua sắm ngay!</text>
+                }
+            </p>
+            <a href="@Url.Action("Products", "Customer")" class="btn btn-primary">
+                <i class="fas fa-shopping-cart"></i> Mua sắm ngay
+            </a>
+        </div>
+    </div>
+}
+
+@section scripts {
+    <script>
+function cancelOrder(orderId) {
+    if (!confirm('Bạn có chắc chắn muốn hủy đơn hàng này?')) {
+        return;
+    }
+
+    $.ajax({
+        url: '@Url.Action("CancelOrder", "Customer")',
+        type: 'POST',
+        data: { orderId: orderId },
+        success: function(response) {
+            if (response.success) {
+                alert(response.message);
+                location.reload();
+            } else {
+                alert(response.message);
+            }
+        },
+        error: function() {
+            alert('Có lỗi xảy ra!');
+        }
+    });
+}
+    </script>
+}

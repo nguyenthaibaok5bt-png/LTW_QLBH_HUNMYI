@@ -1,0 +1,255 @@
+﻿@{
+    ViewBag.Title = "Giới thiệu";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+}
+
+<!-- Hero Header Section -->
+<div class="about-hero">
+    <h1>Chào mừng đến với <span class="brand-name">𝓗𝓾𝓷𝓶𝔂𝓲.𝓬𝓸𝓶</span></h1>
+    <p class="hero-subtitle">Nơi bạn có thể thỏa sức gacha các nhân vật bạn yêu thích đến từ nhiều thể loại anime, game</p>
+</div>
+
+<!-- Section 1: Giới Thiệu Chung -->
+<div class="about-section no-effect">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <img src="@Url.Content("~/Content/Images/Introduce/gioithieu1.jpg")" alt="Giới thiệu chung" class="about-image" />
+            </div>
+            <div class="col-md-6">
+                <div class="section-content">
+                    <h2>Giới Thiệu Chung</h2>
+                    <p>
+                        Hunmyi - Nơi quy tụ những hình ảnh nhân vật anime, game được yêu thích nhất. 
+                        Chúng tôi chuyên cung cấp các sản phẩm merchandise chất lượng cao từ các series anime và game nổi tiếng. 
+                        Với đam mê về văn hóa otaku, chúng tôi mong muốn mang đến cho bạn những trải nghiệm mua sắm tuyệt vời nhất!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Section 2: Chất Lượng Sản Phẩm -->
+<div class="about-section">
+    <div class="container">
+        <div class="row align-items-center flex-row-reverse">
+            <div class="col-md-6">
+                <img src="@Url.Content("~/Content/Images/Introduce/gioithieu2.jpg")" alt="Chất lượng sản phẩm" class="about-image" />
+            </div>
+            <div class="col-md-6">
+                <div class="section-content">
+                    <h2>Chất Lượng Sản Phẩm</h2>
+                    <p>
+                        Sản phẩm của chúng tôi được sản xuất với tiêu chuẩn cao nhất, đảm bảo độ bền và độ chính xác về chi tiết. 
+                        Mỗi sản phẩm đều được kiểm tra kỹ lưỡng trước khi đến tay khách hàng. 
+                        Chúng tôi cam kết mang đến những sản phẩm chất lượng tốt nhất với giá cả hợp lý.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Section 3: Mẫu Mã Đa Dạng -->
+<div class="about-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <img src="@Url.Content("~/Content/Images/Introduce/gioithieu3.png")" alt="Mẫu mã đa dạng" class="about-image" />
+            </div>
+            <div class="col-md-6">
+                <div class="section-content">
+                    <h2>Mẫu Mã Đa Dạng</h2>
+                    <p>
+                        Mẫu mã phong phú từ nhiều series anime, game khác nhau. 
+                        Từ các nhân vật kinh điển đến những series mới nhất, chúng tôi luôn cập nhật kho sản phẩm đa dạng. 
+                        Bạn có thể dễ dàng tìm thấy những nhân vật yêu thích của mình tại Hunmyi!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Section 4: Quà Tặng Vô Vàn -->
+<div class="about-section">
+    <div class="container">
+        <div class="row align-items-center flex-row-reverse">
+            <div class="col-md-6">
+                <img src="@Url.Content("~/Content/Images/Introduce/gioithieu4.jpg")" alt="Quà tặng vô vàn" class="about-image" />
+            </div>
+            <div class="col-md-6">
+                <div class="section-content">
+                    <h2>Quà Tặng Vô Vàn</h2>
+                    <p>
+                        Quà tặng hấp dẫn dành cho khách hàng thân thiết. 
+                        Chương trình khuyến mãi liên tục, tích điểm đổi quà và nhiều ưu đãi đặc biệt khác. 
+                        Mua sắm tại Hunmyi không chỉ là sở hữu sản phẩm yêu thích mà còn nhận được nhiều phần quà giá trị!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        // Scroll animation for sections
+        const sections = document.querySelectorAll('.about-section:not(.no-effect)');
+        
+        window.addEventListener('scroll', () => {
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                
+                // If section is in viewport, add show class
+                if (rect.top < window.innerHeight - 50) {
+                    section.classList.add('show');
+                }
+            });
+        });
+    </script>
+}
+
+<style>
+    /* Hero Header Section */
+    .about-hero {
+        background: white;
+        color: black;
+        text-align: center;
+        padding: 80px 40px 60px;
+        margin: -30px -15px 0;
+    }
+
+    .about-hero h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+
+    .brand-name {
+        font-family: cursive;
+        font-size: 3rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.3rem;
+        font-family: cursive;
+        max-width: 800px;
+        margin: 0 auto;
+        opacity: 0.95;
+    }
+
+    /* About Sections */
+    .about-section {
+        padding: 60px 0;
+        opacity: 0;
+        transform: translateY(50px);
+        transition: opacity 2s ease, transform 1.5s ease;
+    }
+
+    .about-section.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* First section always visible */
+    .about-section.no-effect {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+        transition: none !important;
+    }
+
+    /* Alternating background colors */
+    .about-section:nth-child(odd) {
+        background-color: #d8e0ad;
+    }
+
+    .about-section:nth-child(even) {
+        background-color: #ccfc7a;
+    }
+
+    /* Image styling with animation */
+    .about-image {
+        width: 100%;
+        max-width: 370px;
+        height: 350px;
+        object-fit: cover;
+        border-radius: 20px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        animation: slideLeftRight 4s ease-in-out infinite;
+        transition: box-shadow 0.3s ease;
+    }
+
+    .about-image:hover {
+        box-shadow: 0 8px 20px rgba(255, 92, 141, 0.7);
+    }
+
+    @@keyframes slideLeftRight {
+        0%, 100% {
+            transform: translateX(0);
+        }
+        50% {
+            transform: translateX(20px);
+        }
+    }
+
+    /* Section content */
+    .section-content {
+        padding: 20px 40px;
+    }
+
+    .section-content h2 {
+        color: #34495e;
+        font-size: 2rem;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    .section-content p {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: #555;
+        padding: 0 20px;
+        text-align: justify;
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .about-hero h1 {
+            font-size: 1.8rem;
+        }
+
+        .brand-name {
+            font-size: 2rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+        }
+
+        .about-section {
+            padding: 40px 0;
+        }
+
+        .about-image {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .section-content {
+            padding: 20px 15px;
+            text-align: center;
+        }
+
+        .section-content h2 {
+            font-size: 1.5rem;
+        }
+
+        .section-content p {
+            font-size: 1rem;
+        }
+    }
+</style>

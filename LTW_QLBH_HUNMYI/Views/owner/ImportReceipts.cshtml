@@ -1,0 +1,23 @@
+﻿@model IEnumerable<LTW_QLBH_HUNMYI.Models.PHIEUNHAP>
+@{
+    Layout = "~/Views/Shared/_LayoutOwner.cshtml";
+}
+
+<a href="@Url.Action("CreateImport")" class="btn btn-primary">Tạo phiếu nhập mới</a>
+
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr><th>Mã PN</th><th>Ngày nhập</th><th>Tổng tiền</th><th>Trạng thái</th></tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.MAPN</td>
+                <td>@p.NGAYNHAP</td>
+                <td>@p.TONGTIEN</td>
+                <td>@p.TRANGTHAI</td>
+            </tr>
+        }
+    </tbody>
+</table>

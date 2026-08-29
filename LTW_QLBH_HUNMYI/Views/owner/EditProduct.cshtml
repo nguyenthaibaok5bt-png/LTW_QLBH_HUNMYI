@@ -1,0 +1,72 @@
+﻿@model LTW_QLBH_HUNMYI.Models.SANPHAM
+
+@{
+    ViewBag.Title = "Chỉnh sửa sản phẩm";
+    Layout = "~/Views/Shared/_LayoutOwner.cshtml";
+}
+
+<h3>✏️ Chỉnh sửa sản phẩm</h3>
+
+@using (Html.BeginForm("EditProduct", "Owner",
+    FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.MASP)
+
+    <div class="card p-4 shadow-sm">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Tên sản phẩm</label>
+                @Html.TextBoxFor(m => m.TENSP, new { @class = "form-control" })
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Danh mục</label>
+                @Html.DropDownListFor(m => m.MADM,
+                    (SelectList)ViewBag.Categories,
+                    new { @class = "form-control" })
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Giá</label>
+                @Html.TextBoxFor(m => m.GIA, new { @class = "form-control", type = "number" })
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Số lượng tồn</label>
+                @Html.TextBoxFor(m => m.SOLUONGTON, new { @class = "form-control", type = "number" })
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Trạng thái</label>
+                @Html.DropDownListFor(m => m.TRANGTHAI,
+                    new SelectList(new[] { "Đang bán", "Ngừng bán" }),
+                    new { @class = "form-control" })
+            </div>
+
+            <div class="col-md-12 mb-3">
+                <label>Mô tả</label>
+                @Html.TextAreaFor(m => m.MOTA, new { @class = "form-control", rows = 3 })
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Hình ảnh mới</label>
+                <input type="file" name="imageFile" class="form-control" />
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.HINHANH))
+            {
+                <div class="col-md-6 mb-3">
+                    <label>Ảnh hiện tại</label><br />
+                    <img src="~/Content/Images/Products/@Model.HINHANH"
+                         width="100" style="object-fit:cover" />
+                </div>
+            }
+        </div>
+
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary">💾 Cập nhật</button>
+            <a href="@Url.Action("Products")" class="btn btn-secondary">↩ Quay lại</a>
+        </div>
+    </div>
+}

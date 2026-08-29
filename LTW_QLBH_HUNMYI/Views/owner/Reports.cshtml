@@ -1,0 +1,225 @@
+﻿
+@{
+    ViewBag.Title = "Reports";
+    Layout = "~/Views/Shared/_LayoutOwner.cshtml";
+}
+
+<div class="row mb-3">
+    <div class="col-md-3">
+        <label>Chọn thống kê:</label>
+        <select id="statType" class="form-control">
+            <option value="day">Theo ngày</option>
+            <option value="month">Theo tháng</option>
+            <option value="year">Theo năm</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label>Ngày bắt đầu:</label>
+        <input type="date" id="fromDate" class="form-control" />
+    </div>
+    <div class="col-md-3">
+        <label>Ngày kết thúc:</label>
+        <input type="date" id="toDate" class="form-control" />
+    </div>
+    <div class="col-md-3 d-flex align-items-end">
+        <button id="btnFilter" class="btn btn-primary w-100">Cập nhật</button>
+    </div>
+</div>
+
+<!-- Biểu đồ doanh thu -->
+<div class="card p-3 shadow-sm mb-4" style="height: 300px;">
+    <canvas id="revenueChart" style="width: 100%; height: 100%;"></canvas>
+</div>
+
+<!-- Biểu đồ top 10 sản phẩm -->
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card p-3 shadow-sm" style="height: 300px;">
+            <h5>Top 10 sản phẩm bán chạy</h5>
+            <canvas id="topProductChart" style="width: 100%; height: 100%;"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+<script>
+    let revenueChart, topProductChart;
+
+    const statTypeSelect = document.getElementById('statType');
+    const fromDateInput = document.getElementById('fromDate');
+    const toDateInput = document.getElementById('toDate');
+
+    document.addEventListener('DOMContentLoaded', () => {
+        updateDateInputs();
+        loadReport();
+    });
+
+    statTypeSelect.addEventListener('change', () => {
+        updateDateInputs();
+        loadReport();
+    });
+
+    document.getElementById('btnFilter').addEventListener('click', loadReport);
+
+    function updateDateInputs() {
+        const type = statTypeSelect.value;
+        const today = new Date();
+
+        if (type === 'day') {
+            fromDateInput.type = 'date';
+            toDateInput.type = 'date';
+            const past30 = new Date();
+            past30.setDate(past30.getDate() - 30);
+            fromDateInput.value = past30.toISOString().slice(0, 10);
+            toDateInput.value = today.toISOString().slice(0, 10);
+        } else if (type === 'month') {
+            fromDateInput.type = 'month';
+            toDateInput.type = 'month';
+            const past1Month = new Date();
+            past1Month.setMonth(past1Month.getMonth() - 1);
+            fromDateInput.value = past1Month.toISOString().slice(0, 7);
+            toDateInput.value = today.toISOString().slice(0, 7);
+        } else if (type === 'year') {
+            fromDateInput.type = 'number';
+            toDateInput.type = 'number';
+            fromDateInput.value = today.getFullYear() - 1;
+            toDateInput.value = today.getFullYear();
+        }
+    }
+
+    function sortLabels(labels, type) {
+        if (type === 'day' || type === 'month') {
+            // Chuỗi ISO yyyy-MM-dd hoặc yyyy-MM → sort trực tiếp
+            return labels.sort();
+        } else if (type === 'year') {
+            return labels.sort((a, b) => Number(a) - Number(b));
+        }
+        return labels;
+    }
+
+    function renderRevenueChart(labels, data, type) {
+        if (revenueChart) revenueChart.destroy();
+        if (!labels || !data || labels.length === 0) return;
+
+        labels = sortLabels(labels, type);
+
+        revenueChart = new Chart(document.getElementById('revenueChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: labels.map(l => {
+                    if (type === 'day') {
+                        const [y, m, d] = l.split('-');
+                        return d + '/' + m + '/' + y; // dd/MM/yyyy
+                    }
+                    if (type === 'month') {
+                        const [y, m] = l.split('-');
+                        return m + '/' + y; // MM/yyyy
+                    }
+                    return l; // năm
+                }),
+                datasets: [{
+                    label: 'Doanh thu (VNĐ)',
+                    data: data.map(Number),
+                    backgroundColor: 'rgba(76,175,80,0.7)',
+                    borderColor: '#4CAF50',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: true, position: 'top' },
+                    tooltip: {
+                        callbacks: {
+                            label: ctx => 'Doanh thu: ' + Number(ctx.raw).toLocaleString('vi-VN') + ' ₫'
+                        }
+                    },
+                    datalabels: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: v => {
+                                if (v >= 1e9) return (v / 1e9).toFixed(1) + ' tỷ';
+                                if (v >= 1e6) return (v / 1e6).toFixed(1) + ' triệu';
+                                if (v >= 1e3) return (v / 1e3).toFixed(1) + ' K';
+                                return Number(v).toLocaleString('vi-VN');
+                            }
+                        }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+    }
+
+
+    // Render biểu đồ top sản phẩm
+    function renderTopProducts(labels, data) {
+        if (topProductChart) topProductChart.destroy();
+        if (!labels || !data || labels.length === 0) return;
+
+        topProductChart = new Chart(document.getElementById('topProductChart').getContext('2d'), {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#C9CBCF', '#FF5A5E', '#8AFFC1', '#FF8FD6'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { font: { size: 14 } } },
+                    tooltip: {
+                        callbacks: {
+                            label: function (ctx) {
+                                const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                                const value = ctx.raw;
+                                const percent = ((value / total) * 100).toFixed(1);
+                                return ctx.label + ': ' + value + ' sp (' + percent + '%)';
+                            }
+                        }
+                    },
+                    datalabels: {
+                        color: '#fff',
+                        font: { weight: 'bold', size: 12 },
+                        formatter: (value, ctx) => {
+                            const total = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                            return ((value / total) * 100).toFixed(1) + '%';
+                        }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+    }
+
+    function loadReport() {
+        const type = statTypeSelect.value; // 'day', 'month', 'year'
+        let from = fromDateInput.value;
+        let to = toDateInput.value;
+
+        if (!from) from = new Date().toISOString().slice(0, 10);
+        if (!to) to = new Date().toISOString().slice(0, 10);
+
+        // Biểu đồ doanh thu
+        fetch(`/Owner/GetRevenue?type=${type}&fromDate=${from}&toDate=${to}`)
+            .then(res => res.json())
+            .then(res => renderRevenueChart(res.labels, res.data, type));
+
+        // Biểu đồ top sản phẩm (thêm type)
+        fetch(`/Owner/GetTopProducts?type=${type}&fromDate=${from}&toDate=${to}`)
+            .then(res => res.json())
+            .then(res => renderTopProducts(res.labels, res.data));
+    }
+
+</script>
+

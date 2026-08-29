@@ -1,0 +1,75 @@
+﻿@model LTW_QLBH_HUNMYI.Models.NHANVIEN
+
+@{
+    ViewData["Title"] = "Thông tin nhân viên";
+    Layout = "~/Views/Shared/_LayoutOwner.cshtml";
+}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">📌 Thông tin chi tiết nhân viên</h2>
+
+    <div class="card shadow p-4">
+        <div class="row mb-3">
+            <div class="col-md-3 font-weight-bold">Mã nhân viên:</div>
+            <div class="col-md-9">@Model.MANV</div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-3 font-weight-bold">Họ và tên:</div>
+            <div class="col-md-9">@Model.HOTENNV</div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-3 font-weight-bold">Giới tính:</div>
+            <div class="col-md-9">@Model.GIOITINH</div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-3 font-weight-bold">Ngày sinh:</div>
+            <div class="col-md-9">@Model.NGAYSINH</div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-3 font-weight-bold">Ngày vào làm:</div>
+            <div class="col-md-9">@Model.NGAYVAOLAM</div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-3 font-weight-bold">Số điện thoại:</div>
+            <div class="col-md-9">@Model.SDT</div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-3 font-weight-bold">Email:</div>
+            <div class="col-md-9">@Model.EMAIL</div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-3 font-weight-bold">Địa chỉ:</div>
+            <div class="col-md-9">@Model.DIACHI</div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-3 font-weight-bold">Ngày tạo:</div>
+            <div class="col-md-9">@Model.CHUCVU</div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-3 font-weight-bold">Lương cơ bản:</div>
+            <div class="col-md-9">@String.Format("{0:N0}", Model.LUONGCOBAN)đ</div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-3 font-weight-bold">Trạng thái:</div>
+            <div class="col-md-9">@Model.TRANGTHAI</div>
+        </div>
+
+        <div class="mt-4">
+            <button type="button" class="btn btn-secondary" onclick="history.back();">⬅ Quay lại</button>
+        </div>
+
+    </div>
+</div>
+
+

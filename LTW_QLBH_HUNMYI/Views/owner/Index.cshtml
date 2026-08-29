@@ -1,0 +1,182 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_LayoutOwner.cshtml";
+}
+
+<div class="row">
+    <!-- Thống kê tổng quan -->
+    <div class="col-md-3">
+        <div class="stats-card">
+            <i class="fas fa-box fa-2x"></i>
+            <h3>@ViewBag.TotalProducts</h3>
+            <p class="mb-0">Sản phẩm đang bán</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stats-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            <i class="fas fa-shopping-cart fa-2x"></i>
+            <h3>@ViewBag.TotalOrders</h3>
+            <p class="mb-0">Đơn hàng</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stats-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+            <i class="fas fa-users fa-2x"></i>
+            <h3>@ViewBag.TotalCustomers</h3>
+            <p class="mb-0">Khách hàng</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stats-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+            <i class="fas fa-dollar-sign fa-2x"></i>
+            <h3>@String.Format("{0:N0}", ViewBag.TotalRevenue)đ</h3>
+            <p class="mb-0">Doanh thu</p>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Cảnh báo -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-exclamation-triangle text-warning"></i>
+                    Cảnh báo
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning mb-2">
+                    <i class="fas fa-clock"></i>
+                    <strong>@ViewBag.PendingOrders</strong> đơn hàng chờ xử lý
+                    <a href="@Url.Action("Orders", "Owner", new { status = "Chờ xử lý" })"
+                       class="alert-link float-end">Xem ngay</a>
+                </div>
+                <div class="alert alert-danger mb-0">
+                    <i class="fas fa-box-open"></i>
+                    <strong>@ViewBag.LowStockProducts</strong> sản phẩm sắp hết hàng
+                    <a href="@Url.Action("Products", "Owner")"
+                       class="alert-link float-end">Kiểm tra</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Truy cập nhanh -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-bolt"></i>
+                    Truy cập nhanh
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <a href="@Url.Action("CreateProduct", "Owner")"
+                           class="btn btn-primary w-100">
+                            <i class="fas fa-plus"></i> Thêm sản phẩm
+                        </a>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <a href="@Url.Action("Orders", "Owner")"
+                           class="btn btn-info w-100 text-white">
+                            <i class="fas fa-list"></i> Đơn hàng
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="@Url.Action("ImportReceipts", "Owner")"
+                           class="btn btn-success w-100">
+                            <i class="fas fa-file-import"></i> Nhập hàng
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="@Url.Action("Reports", "Owner")"
+                           class="btn btn-warning w-100 text-white">
+                            <i class="fas fa-chart-bar"></i> Báo cáo
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Đơn hàng gần đây -->
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">
+            <i class="fas fa-history"></i>
+            Đơn hàng gần đây
+        </h5>
+        <a href="@Url.Action("Orders", "Owner")" class="btn btn-sm btn-primary">
+            Xem tất cả
+        </a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Mã đơn</th>
+                        <th>Khách hàng</th>
+                        <th>Ngày lập</th>
+                        <th>Tổng tiền</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (ViewBag.RecentOrders != null && ViewBag.RecentOrders.Count > 0)
+                    {
+                        foreach (var order in ViewBag.RecentOrders)
+                        {
+                            string badgeClass = "";
+                            switch (order.TRANGTHAI)
+                            {
+                                case "Chờ xử lý":
+                                    badgeClass = "bg-warning";
+                                    break;
+                                case "Đang xử lý":
+                                    badgeClass = "bg-info";
+                                    break;
+                                case "Hoàn thành":
+                                    badgeClass = "bg-success";
+                                    break;
+                                case "Đã hủy":
+                                    badgeClass = "bg-danger";
+                                    break;
+                            }
+
+                            <tr>
+                                <td><strong>@order.MAHD_BAN</strong></td>
+                                <td>@order.KHACHHANG.HOTENKH</td>
+                                <td>@order.NGAYLAP</td>
+                                <td><strong>@String.Format("{0:N0}", order.TONGTIEN)đ</strong></td>
+                                <td>
+                                    <span class="badge @badgeClass">@order.TRANGTHAI</span>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("OrderDetails", "Owner", new { id = order.MAHD_BAN })"
+                                       class="btn btn-sm btn-primary">
+                                        <i class="fas fa-eye"></i> Chi tiết
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center">
+                                <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                                <p class="text-muted">Chưa có đơn hàng nào</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewBag.Title = "CreateProduct";
+}
+@model LTW_QLBH_HUNMYI.Models.SANPHAM
+
+@{
+    ViewBag.Title = "Thêm sản phẩm";
+    Layout = "~/Views/Shared/_LayoutOwner.cshtml";
+}
+
+<h3>➕ Thêm sản phẩm mới</h3>
+
+@using (Html.BeginForm("CreateProduct", "Owner",
+    FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="card p-4 shadow-sm">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label>Tên sản phẩm</label>
+                @Html.TextBoxFor(m => m.TENSP, new { @class = "form-control", required = "required" })
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Danh mục</label>
+                @Html.DropDownListFor(m => m.MADM,
+                    (SelectList)ViewBag.Categories,
+                    "-- Chọn danh mục --",
+                    new { @class = "form-control", required = "required" })
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Giá</label>
+                @Html.TextBoxFor(m => m.GIA, new { @class = "form-control", type = "number", min = "0" })
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Số lượng tồn</label>
+                @Html.TextBoxFor(m => m.SOLUONGTON, new { @class = "form-control", type = "number", min = "0" })
+            </div>
+
+            <div class="col-md-12 mb-3">
+                <label>Mô tả</label>
+                @Html.TextAreaFor(m => m.MOTA, new { @class = "form-control", rows = 3 })
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label>Hình ảnh</label>
+                <input type="file" name="imageFile" class="form-control" />
+            </div>
+        </div>
+
+        <div class="text-end">
+            <button type="submit" class="btn btn-success">💾 Lưu</button>
+            <a href="@Url.Action("Products")" class="btn btn-secondary">↩ Quay lại</a>
+        </div>
+    </div>
+}
+
+

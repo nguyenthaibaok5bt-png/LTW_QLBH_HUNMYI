@@ -1,0 +1,39 @@
+﻿@model IEnumerable<LTW_QLBH_HUNMYI.Models.KHACHHANG>
+@{
+    Layout = "~/Views/Shared/_LayoutOwner.cshtml";
+}
+
+@using (Html.BeginForm("Customers", "Owner", FormMethod.Get))
+{
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <input type="text"
+                   name="khach"
+                   class="form-control"
+                   placeholder="Nhập tên hoặc mã khách hàng..." />
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-warning">Tìm khách</button>
+            <a href="@Url.Action("Customers","Owner")"
+               class="btn btn-secondary">Tất cả</a>
+        </div>
+    </div>
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr><th>Mã KH</th><th>Tên KH</th><th>SDT</th><th>Email</th><th></th></tr>
+    </thead>
+    <tbody>
+        @foreach (var c in Model)
+        {
+            <tr>
+                <td>@c.MAKH</td>
+                <td>@c.HOTENKH</td>
+                <td>@c.SDT</td>
+                <td>@c.EMAIL</td>
+                <td><a href="@Url.Action("CustomerDetail","Owner", new {id=c.MAKH})" class="btn btn-primary btn-sm">Xem</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

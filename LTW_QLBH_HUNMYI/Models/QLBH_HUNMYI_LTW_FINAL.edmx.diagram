@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="440fd5eb8e914260a15a5369b05342d6" Name="Diagram1">
+        <EntityTypeShape EntityType="QLBH_HUNMYI_LTW_FINALModel.ACCOUNT" Width="1.5" PointX="6" PointY="12" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLBH_HUNMYI_LTW_FINALModel.CTHD_BAN" Width="1.5" PointX="5.25" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLBH_HUNMYI_LTW_FINALModel.CHITIET_GIOHANG" Width="1.5" PointX="5.25" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLBH_HUNMYI_LTW_FINALModel.CHITIETPHIEUNHAP" Width="1.5" PointX="8.25" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLBH_HUNMYI_LTW_FINALModel.DANHMUC" Width="1.5" PointX="0.75" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLBH_HUNMYI_LTW_FINALModel.GIOHANG" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLBH_HUNMYI_LTW_FINALModel.HOADON_BAN" Width="1.5" PointX="3" PointY="13.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLBH_HUNMYI_LTW_FINALModel.KHACHHANG" Width="1.5" PointX="0.75" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLBH_HUNMYI_LTW_FINALModel.NHANVIEN" Width="1.5" PointX="0.75" PointY="13" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLBH_HUNMYI_LTW_FINALModel.PHIEUNHAP" Width="1.5" PointX="6" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLBH_HUNMYI_LTW_FINALModel.SANPHAM" Width="1.5" PointX="3" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="QLBH_HUNMYI_LTW_FINALModel.XUONGIN" Width="1.5" PointX="3.75" PointY="8.5" IsExpanded="true" />
+        <AssociationConnector Association="QLBH_HUNMYI_LTW_FINALModel.FK__ACCOUNT__MAKH__4D94879B" ManuallyRouted="false" />
+        <AssociationConnector Association="QLBH_HUNMYI_LTW_FINALModel.FK__ACCOUNT__MANV__4E88ABD4" ManuallyRouted="false" />
+        <AssociationConnector Association="QLBH_HUNMYI_LTW_FINALModel.FK_CTHD_HOADON" ManuallyRouted="false" />
+        <AssociationConnector Association="QLBH_HUNMYI_LTW_FINALModel.FK_CTHD_SANPHAM" ManuallyRouted="false" />
+        <AssociationConnector Association="QLBH_HUNMYI_LTW_FINALModel.FK__CHITIET_GI__MAGH__66603565" ManuallyRouted="false" />
+        <AssociationConnector Association="QLBH_HUNMYI_LTW_FINALModel.FK__CHITIET_GI__MASP__6754599E" ManuallyRouted="false" />
+        <AssociationConnector Association="QLBH_HUNMYI_LTW_FINALModel.FK__CHITIETPHI__MASP__09A971A2" ManuallyRouted="false" />
+        <AssociationConnector Association="QLBH_HUNMYI_LTW_FINALModel.FK_CTPN_PHIEUNHAP" ManuallyRouted="false" />
+        <AssociationConnector Association="QLBH_HUNMYI_LTW_FINALModel.FK_SP_DM" ManuallyRouted="false" />
+        <AssociationConnector Association="QLBH_HUNMYI_LTW_FINALModel.FK__GIOHANG__MAKH__619B8048" ManuallyRouted="false" />
+        <AssociationConnector Association="QLBH_HUNMYI_LTW_FINALModel.FK__HOADON_BAN__MAKH__6FE99F9F" ManuallyRouted="false" />
+        <AssociationConnector Association="QLBH_HUNMYI_LTW_FINALModel.FK_HOADON_NHANVIEN" ManuallyRouted="false" />
+        <AssociationConnector Association="QLBH_HUNMYI_LTW_FINALModel.FK__PHIEUNHAP__MANV__03F0984C" ManuallyRouted="false" />
+        <AssociationConnector Association="QLBH_HUNMYI_LTW_FINALModel.FK_PHIEUNHAP_NHACUNGCAP" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

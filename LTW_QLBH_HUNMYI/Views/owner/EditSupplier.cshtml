@@ -1,0 +1,188 @@
+﻿@model LTW_QLBH_HUNMYI.Models.XUONGIN
+@{
+    ViewBag.Title = "Chỉnh sửa xưởng in";
+    Layout = "~/Views/Shared/_LayoutOwner.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="card shadow">
+                <div class="card-header bg-warning text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-edit"></i> Chỉnh sửa xưởng in
+                    </h4>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("EditSupplier", "Owner", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(m => m.MAXI)
+
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-barcode text-warning"></i> Mã xưởng in
+                            </label>
+                            <input class="form-control" value="@Model.MAXI" disabled />
+                            <small class="text-muted">Mã xưởng không thể thay đổi</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-industry text-warning"></i> Tên xưởng in <span class="text-danger">*</span>
+                            </label>
+                            @Html.TextBoxFor(m => m.TENXI, new { @class = "form-control", placeholder = "Nhập tên xưởng in", required = "required" })
+                            @Html.ValidationMessageFor(m => m.TENXI, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-map-marker-alt text-warning"></i> Địa chỉ
+                            </label>
+                            @Html.TextAreaFor(m => m.DIACHI, new { @class = "form-control", rows = 2, placeholder = "Nhập địa chỉ xưởng in" })
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-phone text-warning"></i> Số điện thoại
+                            </label>
+                            @Html.TextBoxFor(m => m.SDT, new { @class = "form-control", placeholder = "Ví dụ: 0901234567", maxlength = "15" })
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-envelope text-warning"></i> Email
+                            </label>
+                            @Html.TextBoxFor(m => m.EMAIL, new { @class = "form-control", type = "email", placeholder = "example@email.com" })
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-user text-warning"></i> Người liên hệ
+                            </label>
+                            @Html.TextBoxFor(m => m.NGUOILIENHE, new { @class = "form-control", placeholder = "Tên người liên hệ" })
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-toggle-on text-warning"></i> Trạng thái
+                            </label>
+                            @Html.DropDownListFor(m => m.TRANGTHAI,
+                                     new SelectList(new[] { "Hoạt động", "Ngừng hợp tác" }, Model.TRANGTHAI),
+                                     new { @class = "form-control" })
+                            <small class="text-muted">
+                                Chọn "Ngừng hợp tác" nếu muốn tạm ngừng làm việc với xưởng in này
+                            </small>
+                        </div>
+
+
+                        <div class="form-group" id="ghichuGroup" style="display: @(Model.TRANGTHAI == "Ngừng hợp tác" || !string.IsNullOrEmpty(Model.GHICHU) ? "block" : "none")">
+                            <label>
+                                <i class="fas fa-sticky-note text-warning"></i> Ghi chú / Nguyên nhân <span class="text-danger">*</span>
+                            </label>
+                            @Html.TextAreaFor(m => m.GHICHU, new { @class = "form-control", rows = 3, placeholder = "Nhập nguyên nhân ngừng hợp tác (bắt buộc khi chọn 'Ngừng hợp tác')", id = "ghichuField" })
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle"></i> Ghi chú này sẽ giúp bạn đánh giá lại xưởng in trong tương lai
+                            </small>
+                        </div>
+
+                        <hr />
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-warning btn-lg">
+                                <i class="fas fa-save"></i> Lưu thay đổi
+                            </button>
+                            <a href="@Url.Action("Suppliers")" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Hủy
+                            </a>
+                            <a href="@Url.Action("SupplierDetail", new { id = Model.MAXI })" class="btn btn-info">
+                                <i class="fas fa-eye"></i> Xem chi tiết
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 10px;
+        border: none;
+    }
+
+    .card-header {
+        border-radius: 10px 10px 0 0 !important;
+        background: linear-gradient(135deg, #f0ad4e 0%, #ec971f 100%);
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+            .form-group label i {
+                margin-right: 8px;
+            }
+
+    .form-control:focus {
+        border-color: #f0ad4e;
+        box-shadow: 0 0 0 0.2rem rgba(240, 173, 78, 0.25);
+    }
+
+    .btn {
+        border-radius: 5px;
+        padding: 10px 20px;
+        margin: 0 5px;
+    }
+
+    .btn-lg {
+        font-size: 16px;
+        font-weight: 500;
+    }
+</style>
+
+<script>// Show/hide GHICHU field based on status selection
+    document.addEventListener('DOMContentLoaded', function() {
+        var trangthaiSelect = document.getElementById('TRANGTHAI');
+        var ghichuGroup = document.getElementById('ghichuGroup');
+        var ghichuField = document.getElementById('ghichuField');
+
+        // Check initial status OR if GHICHU already has value (supplier previously stopped)
+        if (trangthaiSelect.value === 'Ngừng hợp tác' || ghichuField.value.trim()) {
+            ghichuGroup.style.display = 'block';
+            if (trangthaiSelect.value === 'Ngừng hợp tác') {
+                ghichuField.setAttribute('required', 'required');
+            }
+        }
+
+        // Toggle visibility when status changes
+        trangthaiSelect.addEventListener('change', function() {
+            if (this.value === 'Ngừng hợp tác') {
+                ghichuGroup.style.display = 'block';
+                ghichuField.setAttribute('required', 'required');
+            } else {
+                ghichuGroup.style.display = 'none';
+                ghichuField.removeAttribute('required');
+                ghichuField.value = ''; // Clear value when hiding
+            }
+        });
+
+        // Form validation on submit
+        var form = trangthaiSelect.closest('form');
+        form.addEventListener('submit', function(e) {
+            if (trangthaiSelect.value === 'Ngừng hợp tác' && !ghichuField.value.trim()) {
+                e.preventDefault();
+                alert('Vui lòng nhập nguyên nhân ngừng hợp tác!');
+                ghichuField.focus();
+                return false;
+            }
+        });
+    });</script>

@@ -1,0 +1,23 @@
+﻿@model LTW_QLBH_HUNMYI.Models.DANHMUC
+
+@{
+    ViewBag.Title = "Ẩn danh mục";
+    Layout = "~/Views/Shared/_LayoutOwner.cshtml";
+}
+
+<h4 class="text-danger">⚠️ Xác nhận ẩn danh mục</h4>
+
+<div class="card p-4">
+    <p><b>Mã:</b> @Model.MADM</p>
+    <p><b>Tên:</b> @Model.TENDM</p>
+    <p><b>Tên:</b> @Model.MOTA_DM</p>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.MADM)
+
+        <button type="submit" class="btn btn-danger">Ẩn danh mục</button>
+        <a href="@Url.Action("Categories")" class="btn btn-secondary ms-2">Hủy</a>
+    }
+</div>

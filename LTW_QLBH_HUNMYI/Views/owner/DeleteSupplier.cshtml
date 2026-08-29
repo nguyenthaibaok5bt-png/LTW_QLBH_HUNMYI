@@ -1,0 +1,147 @@
+﻿@model LTW_QLBH_HUNMYI.Models.XUONGIN
+@{
+    ViewBag.Title = "Xác nhận xóa xưởng in";
+    Layout = "~/Views/Shared/_LayoutOwner.cshtml";
+}
+
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Owner")">Trang chủ</a></li>
+        <li class="breadcrumb-item"><a href="@Url.Action("Suppliers", "Owner")">Xưởng in</a></li>
+        <li class="breadcrumb-item active">Xóa xưởng in</li>
+    </ol>
+</nav>
+
+@if (Model == null)
+{
+    <div class="alert alert-danger">
+        <i class="fas fa-times-circle"></i> Không tìm thấy xưởng in!
+    </div>
+    <a href="@Url.Action("Suppliers", "Owner")" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Quay lại
+    </a>
+}
+else
+{
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <!-- Supplier Info Card -->
+            <div class="card shadow border-0 mb-4">
+                <div class="card-body p-4">
+                    <h5 class="mb-3 pb-3 border-bottom">Thông tin xưởng in</h5>
+
+                    <div class="row mb-3">
+                        <div class="col-5 text-muted">Mã xưởng in:</div>
+                        <div class="col-7 fw-bold">@Model.MAXI</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-5 text-muted">Tên xưởng in:</div>
+                        <div class="col-7 fw-bold">@Model.TENXI</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-5 text-muted">Địa chỉ:</div>
+                        <div class="col-7">@(Model.DIACHI ?? "N/A")</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-5 text-muted">Số điện thoại:</div>
+                        <div class="col-7">@(Model.SDT ?? "N/A")</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-5 text-muted">Email:</div>
+                        <div class="col-7">@(Model.EMAIL ?? "N/A")</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-5 text-muted">Người liên hệ:</div>
+                        <div class="col-7">@(Model.NGUOILIENHE ?? "N/A")</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-5 text-muted">Trạng thái:</div>
+                        <div class="col-7">
+                            @if (Model.TRANGTHAI == "Đang hợp tác")
+                            {
+                                <span class="badge bg-success">@Model.TRANGTHAI</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">@Model.TRANGTHAI</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Warning Alert -->
+            <div class="alert alert-danger mb-4">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-exclamation-triangle fa-2x me-3"></i>
+                    <div>
+                        <strong>Cảnh báo!</strong> Xóa xưởng in sẽ XÓA VĨNH VIỄN khỏi hệ thống.
+                        Hành động này KHÔNG THỂ KHÔI PHỤC!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Form -->
+            @using (Html.BeginForm("DeleteSupplier", "Owner", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("id", Model.MAXI)
+
+                <div class="d-flex gap-3 justify-content-end">
+                    <a href="@Url.Action("Suppliers", "Owner")" class="btn btn-secondary px-4">
+                        <i class="fas fa-times me-1"></i> Hủy bỏ
+                    </a>
+                    <button type="submit" class="btn btn-danger px-4">
+                        <i class="fas fa-trash-alt me-1"></i> Xác nhận xóa
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<style>
+    .card {
+        border-radius: 10px;
+    }
+
+    .btn {
+        border-radius: 6px;
+        font-weight: 500;
+        padding: 10px 20px;
+    }
+
+    .btn-danger {
+        background: #dc3545;
+        border: none;
+    }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+    .btn-secondary {
+        background: #6c757d;
+        border: none;
+        color: white;
+    }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+    .badge {
+        padding: 5px 10px;
+    }
+
+    .alert-danger {
+        border-left: 4px solid #dc3545;
+    }
+</style>

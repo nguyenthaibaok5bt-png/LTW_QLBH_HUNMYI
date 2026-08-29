@@ -1,0 +1,165 @@
+﻿@model LTW_QLBH_HUNMYI.Models.SANPHAM
+@{
+    ViewBag.Title = "Xác nhận ngừng bán";
+    Layout = "~/Views/Shared/_LayoutOwner.cshtml";
+}
+
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Owner")">Trang chủ</a></li>
+        <li class="breadcrumb-item"><a href="@Url.Action("Products", "Owner")">Sản phẩm</a></li>
+        <li class="breadcrumb-item active">Ngừng bán</li>
+    </ol>
+</nav>
+
+@if (Model == null)
+{
+    <div class="alert alert-danger">
+        <i class="fas fa-times-circle"></i> Không tìm thấy sản phẩm!
+    </div>
+    <a href="@Url.Action("Products", "Owner")" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Quay lại
+    </a>
+}
+else
+{
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <!-- Product Info Card -->
+            <div class="card shadow border-0 mb-4">
+                <div class="card-body p-4">
+                    <!-- Product Image -->
+                    <div class="text-center mb-4 pb-4 border-bottom">
+                        @if (!string.IsNullOrEmpty(Model.HINHANH))
+                        {
+                            <img src="~/Content/Images/Products/@Model.HINHANH"
+                                 alt="@Model.TENSP"
+                                 class="product-image rounded shadow-sm">
+                        }
+                        else
+                        {
+                            <div class="no-image-placeholder">
+                                <i class="fas fa-image fa-3x text-muted"></i>
+                                <p class="text-muted mt-2">Không có hình ảnh</p>
+                            </div>
+                        }
+                    </div>
+
+                    <h5 class="mb-3 pb-3 border-bottom">Thông tin sản phẩm</h5>
+
+                    <div class="row mb-3">
+                        <div class="col-5 text-muted">Mã sản phẩm:</div>
+                        <div class="col-7 fw-bold">@Model.MASP</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-5 text-muted">Tên sản phẩm:</div>
+                        <div class="col-7 fw-bold">@Model.TENSP</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-5 text-muted">Danh mục:</div>
+                        <div class="col-7">@(Model.DANHMUC?.TENDM ?? "N/A")</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-5 text-muted">Giá bán:</div>
+                        <div class="col-7 text-success fw-bold">@string.Format("{0:N0}", Model.GIA) đ</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-5 text-muted">Số lượng tồn:</div>
+                        <div class="col-7">@Model.SOLUONGTON</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-5 text-muted">Trạng thái:</div>
+                        <div class="col-7">
+                            @if (Model.TRANGTHAI == "Đang bán")
+                            {
+                                <span class="badge bg-success">@Model.TRANGTHAI</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">@Model.TRANGTHAI</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Form -->
+            @using (Html.BeginForm("StopSelling", "Owner", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("id", Model.MASP)
+
+                <div class="d-flex gap-3 justify-content-end">
+                    <a href="@Url.Action("Products", "Owner")" class="btn btn-secondary px-4">
+                        <i class="fas fa-times me-1"></i> Hủy bỏ
+                    </a>
+                    <button type="submit" class="btn btn-warning px-4">
+                        <i class="fas fa-check me-1"></i> Xác nhận ngừng bán
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<style>
+    .card {
+        border-radius: 10px;
+    }
+
+    .btn {
+        border-radius: 6px;
+        font-weight: 500;
+        padding: 10px 20px;
+    }
+
+    .btn-warning {
+        background: #ffc107;
+        color: white;
+        border: none;
+    }
+
+        .btn-warning:hover {
+            background: #e0a800;
+            color: white;
+        }
+
+    .btn-secondary {
+        background: #6c757d;
+        border: none;
+        color: white;
+    }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+    .badge {
+        padding: 5px 10px;
+    }
+
+    .product-image {
+        max-width: 300px;
+        max-height: 300px;
+        object-fit: cover;
+        border: 1px solid #e0e0e0;
+    }
+
+    .no-image-placeholder {
+        width: 300px;
+        height: 300px;
+        margin: 0 auto;
+        background: #f5f5f5;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+</style>

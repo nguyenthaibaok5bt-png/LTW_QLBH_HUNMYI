@@ -1,0 +1,103 @@
+﻿@model LTW_QLBH_HUNMYI.Models.XUONGIN
+@{
+    ViewBag.Title = "Ngừng hợp tác với xưởng in";
+    Layout = "~/Views/Shared/_LayoutOwner.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <i class="fa fa-pause-circle"></i> Ngừng hợp tác với xưởng in
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    @using (Html.BeginForm("ConfirmStopSupplier", "Owner", FormMethod.Post, new { @class = "form-horizontal" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <div class="alert alert-warning">
+                            <i class="fa fa-exclamation-triangle"></i>
+                            <strong>Lưu ý:</strong> Bạn đang ngừng hợp tác với xưởng in. Vui lòng nhập nguyên nhân để đánh giá và tham khảo trong tương lai.
+                        </div>
+
+                        <input type="hidden" name="id" value="@Model.MAXI" />
+
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Mã xưởng in</label>
+                            <div class="col-md-9">
+                                <p class="form-control-static"><strong>@Model.MAXI</strong></p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Tên xưởng in</label>
+                            <div class="col-md-9">
+                                <p class="form-control-static"><strong>@Model.TENXI</strong></p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Địa chỉ</label>
+                            <div class="col-md-9">
+                                <p class="form-control-static">@Model.DIACHI</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Người liên hệ</label>
+                            <div class="col-md-9">
+                                <p class="form-control-static">@Model.NGUOILIENHE</p>
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">
+                                Nguyên nhân ngừng hợp tác <span class="text-danger">*</span>
+                            </label>
+                            <div class="col-md-9">
+                                <textarea name="ghichu"
+                                          class="form-control"
+                                          rows="5"
+                                          placeholder="Nhập nguyên nhân ngừng hợp tác (Ví dụ: Chất lượng sản phẩm không ổn định, giao hàng chậm, giá cao hơn thị trường...)"
+                                          required></textarea>
+                                <span class="help-block">
+                                    <i class="fa fa-info-circle"></i>
+                                    Ghi chú này sẽ giúp bạn đánh giá lại xưởng in trong tương lai
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-9 col-md-offset-3">
+                                <button type="submit" class="btn btn-warning">
+                                    <i class="fa fa-check"></i> Xác nhận ngừng hợp tác
+                                </button>
+                                <a href="@Url.Action("Suppliers")" class="btn btn-default">
+                                    <i class="fa fa-times"></i> Hủy
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .panel-warning .panel-heading {
+        background-color: #f0ad4e;
+        color: white;
+    }
+
+    .help-block {
+        color: #8a6d3b;
+        font-size: 12px;
+    }
+</style>

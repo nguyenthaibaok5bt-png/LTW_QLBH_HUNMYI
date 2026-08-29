@@ -1,0 +1,43 @@
+﻿@model IEnumerable<LTW_QLBH_HUNMYI.Models.SANPHAM>
+@{
+    Layout = "~/Views/Shared/_LayoutStaff.cshtml";
+}
+
+<form method="get" action="/Staff/Products">
+    @Html.DropDownList(
+        "madm",
+        (SelectList)ViewBag.DanhMucList,
+        "-- Tất cả danh mục --",
+        new { @class = "form-control", style = "width:250px; display:inline-block;" }
+    )
+
+    <button type="submit" class="btn btn-primary">Lọc</button>
+</form>
+
+<hr />
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Mã Sản Phẩm</th>
+            <th>Tên Sản Phẩm</th>
+            <th>Tên Danh Mục</th>
+            <th>Tồn Kho</th>
+            <th>Giá</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.MASP</td>
+                <td>@p.TENSP</td>
+                <td>@p.DANHMUC.TENDM</td>
+                <td>@p.SOLUONGTON</td>
+                <td>@String.Format("{0:N0}", p.GIA)đ</td>
+                <td></td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,108 @@
+﻿@model LTW_QLBH_HUNMYI.Models.DANHMUC
+@{
+    ViewBag.Title = "Chỉnh sửa danh mục";
+    Layout = "~/Views/Shared/_LayoutOwner.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-edit"></i> Chỉnh sửa danh mục
+                    </h4>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("EditCategory", "Owner", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(m => m.MADM)
+
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-tag text-primary"></i> Mã danh mục
+                            </label>
+                            <input class="form-control" value="@Model.MADM" disabled />
+                            <small class="text-muted">Mã danh mục không thể thay đổi</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-list-alt text-primary"></i> Tên danh mục <span class="text-danger">*</span>
+                            </label>
+                            @Html.TextBoxFor(m => m.TENDM, new { @class = "form-control", placeholder = "Nhập tên danh mục", required = "required" })
+                            @Html.ValidationMessageFor(m => m.TENDM, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-eye text-primary"></i> Trạng thái
+                            </label>
+                            @Html.DropDownListFor(m => m.TRANGTHAI,
+                                     new SelectList(new[] { "Hiển thị", "Ẩn" }, Model.TRANGTHAI),
+                                     new { @class = "form-control" })
+                            <small class="text-muted">
+                                Chọn "Ẩn" để ẩn danh mục này khỏi trang khách hàng
+                            </small>
+                        </div>
+
+                        <hr />
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save"></i> Cập nhật
+                            </button>
+                            <a href="@Url.Action("Categories")" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Hủy
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 10px;
+        border: none;
+    }
+
+    .card-header {
+        border-radius: 10px 10px 0 0 !important;
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+            .form-group label i {
+                margin-right: 8px;
+            }
+
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    .btn {
+        border-radius: 5px;
+        padding: 10px 20px;
+        margin: 0 5px;
+    }
+
+    .btn-lg {
+        font-size: 16px;
+        font-weight: 500;
+    }
+</style>

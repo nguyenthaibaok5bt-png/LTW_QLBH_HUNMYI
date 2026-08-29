@@ -1,0 +1,38 @@
+﻿@model IEnumerable<LTW_QLBH_HUNMYI.Models.HOADON_BAN>
+@{
+    Layout = "~/Views/Shared/_LayoutStaff.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card text-center p-3">
+            <h5>Công việc hôm nay</h5>
+            <h1 class="text-primary">@ViewBag.TodayWork</h1>
+        </div>
+    </div>
+</div>
+
+<h4 class="mt-4">Đơn hàng chờ xử lý</h4>
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Mã HĐ</th>
+            <th>Ngày lập</th>
+            <th>Khách hàng</th>
+            <th>Tổng tiền</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var o in Model)
+        {
+            <tr>
+                <td>@o.MAHD_BAN</td>
+                <td>@o.NGAYLAP</td>
+                <td>@o.KHACHHANG.HOTENKH</td>
+                <td>@String.Format("{0:N0}", o.TONGTIEN)đ</td>
+                <td><a href="@Url.Action("OrderDetail","Staff", new {id=o.MAHD_BAN})" class="btn btn-primary btn-sm">Xử lý</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

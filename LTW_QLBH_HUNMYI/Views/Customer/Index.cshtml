@@ -1,0 +1,361 @@
+﻿@{
+    ViewBag.Title = "Trang chủ";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+}
+
+
+<!-- Slider Banner -->
+<div class="slider-container">
+    <div class="slider mb-3">
+
+        <div class="slides" style="transform: translateX(0%);">
+            <div class="slide">
+                <img src="@Url.Content("~/Content/Images/Banner/banner1.jpg")" alt="banner 1">
+            </div>
+            <div class="slide">
+                <img src="@Url.Content("~/Content/Images/Banner/banner2.jpg")" alt="banner 2">
+            </div>
+            <div class="slide">
+                <img src="@Url.Content("~/Content/Images/Banner/banner3.jpg")" alt="banner 3">
+            </div>
+        </div>
+        <!--  nút điều hướng -->
+        <button class="nav-btn prev">❮</button>
+        <button class="nav-btn next">❯</button>
+    </div>
+
+    <!-- Dots  -->
+    <div class="slider-dots">
+        <span class="dot active" data-slide="0"></span>
+        <span class="dot" data-slide="1"></span>
+        <span class="dot" data-slide="2"></span>
+    </div>
+</div>
+
+<!-- Danh mục -->
+<div class="mb-5">
+    <h2 class="text-center mb-4">
+        <i class="fas fa-th-large"></i> Danh mục sản phẩm
+    </h2>
+    <div class="row g-4">
+        @if (ViewBag.Categories != null)
+        {
+            foreach (var category in ViewBag.Categories)
+            {
+                <div class="col-md-4 col-lg-3">
+                    <a href="@Url.Action("Products", "Customer", new { category = category.MADM })"
+                       class="text-decoration-none">
+                        <div class="category-card">
+                            <i class="fas fa-box-open fa-3x mb-3" style="color: #f093fb;"></i>
+                            <h5>@category.TENDM</h5>
+                            <p class="text-muted mb-0">@category.MOTA_DM</p>
+                        </div>
+                    </a>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<!-- Sản phẩm mới nhất -->
+<div class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>
+            <i class="fas fa-star"></i> Sản phẩm mới nhất
+        </h2>
+        <a href="@Url.Action("Products", "Customer")" class="btn btn-outline-primary">
+            Xem tất cả <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+    <div class="row g-4">
+        @if (ViewBag.NewProducts != null)
+        {
+            foreach (var product in ViewBag.NewProducts)
+            {
+                <div class="col-md-6 col-lg-3">
+                    <div class="product-card">
+                        <a href="@Url.Action("ProductDetail", "Customer", new { id = product.MASP })">
+                            @if (!string.IsNullOrEmpty(product.HINHANH))
+                            {
+                                <img src="@Url.Content("~/Content/Images/Products/" + product.HINHANH)"
+                                     class="product-image" alt="@product.TENSP">
+                            }
+                            else
+                            {
+                                <div class="product-image d-flex align-items-center justify-content-center bg-light">
+                                    <i class="fas fa-image fa-3x text-muted"></i>
+                                </div>
+                            }
+                        </a>
+                        <div class="p-3">
+                            <h6 class="mb-2">
+                                <a href="@Url.Action("ProductDetail", "Customer", new { id = product.MASP })"
+                                   class="text-decoration-none text-dark">
+                                    @product.TENSP
+                                </a>
+                            </h6>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-danger fw-bold fs-5">
+                                    @String.Format("{0:N0}", product.GIA)đ
+                                </span>
+                                <button class="btn btn-sm btn-primary"
+                                        onclick="addToCart('@product.MASP', 1)">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </div>
+                            <small class="text-muted">
+                                <i class="fas fa-box"></i> Còn @product.SOLUONGTON sản phẩm
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<!-- Sản phẩm bán chạy -->
+<div class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>
+            <i class="fas fa-fire"></i> Sản phẩm bán chạy
+        </h2>
+    </div>
+    <div class="row g-4">
+        @if (ViewBag.HotProducts != null)
+        {
+            foreach (var product in ViewBag.HotProducts)
+            {
+                <div class="col-md-6 col-lg-3">
+                    <div class="product-card">
+                        <div class="position-relative">
+                            <span class="badge bg-danger position-absolute top-0 end-0 m-2">
+                                <i class="fas fa-fire"></i> HOT
+                            </span>
+                            <a href="@Url.Action("ProductDetail", "Customer", new { id = product.MASP })">
+                                @if (!string.IsNullOrEmpty(product.HINHANH))
+                                {
+                                    <img src="@Url.Content("~/Content/Images/Products/" + product.HINHANH)"
+                                         class="product-image" alt="@product.TENSP">
+                                }
+                                else
+                                {
+                                    <div class="product-image d-flex align-items-center justify-content-center bg-light">
+                                        <i class="fas fa-image fa-3x text-muted"></i>
+                                    </div>
+                                }
+                            </a>
+                        </div>
+                        <div class="p-3">
+                            <h6 class="mb-2">
+                                <a href="@Url.Action("ProductDetail", "Customer", new { id = product.MASP })"
+                                   class="text-decoration-none text-dark">
+                                    @product.TENSP
+                                </a>
+                            </h6>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-danger fw-bold fs-5">
+                                    @String.Format("{0:N0}", product.GIA)đ
+                                </span>
+                                <button class="btn btn-sm btn-primary"
+                                        onclick="addToCart('@product.MASP', 1)">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        function addToCart(productId, quantity) {
+            $.ajax({
+                url: '@Url.Action("AddToCart", "Customer")',
+                type: 'POST',
+                data: { productId: productId, quantity: quantity },
+                success: function(response) {
+                    if (response.success) {
+                        alert(response.message);
+                        $('#cartCount').text(response.cartCount);
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function() {
+                    alert('Có lỗi xảy ra!');
+                }
+            });
+        }
+
+        // Load cart count on page load
+        $(document).ready(function() {
+            $.ajax({
+                url: '@Url.Action("GetCartCount", "Customer")',
+                type: 'GET',
+                success: function(response) {
+                    if (response.success) {
+                        $('#cartCount').text(response.count);
+                    }
+                }
+            });
+
+            // Slider functionality
+            let currentSlide = 0;
+            const slides = document.querySelectorAll('.slide');
+            const dots = document.querySelectorAll('.dot');
+            const totalSlides = slides.length;
+            const slidesContainer = document.querySelector('.slides');
+
+            function showSlide(index) {
+                if (index >= totalSlides) {
+                    currentSlide = 0;
+                } else if (index < 0) {
+                    currentSlide = totalSlides - 1;
+                } else {
+                    currentSlide = index;
+                }
+
+                slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+                // Update dots
+                dots.forEach((dot, i) => {
+                    dot.classList.remove('active');
+                    if (i === currentSlide) {
+                        dot.classList.add('active');
+                    }
+                });
+            }
+
+            // Navigation buttons
+            document.querySelector('.prev').addEventListener('click', function() {
+                showSlide(currentSlide - 1);
+            });
+
+            document.querySelector('.next').addEventListener('click', function() {
+                showSlide(currentSlide + 1);
+            });
+
+            // Dots click
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', function() {
+                    showSlide(index);
+                });
+            });
+
+            // Auto slide every 3 seconds
+            setInterval(function() {
+                showSlide(currentSlide + 1);
+            }, 3000);
+        });
+    </script>
+}
+
+<style>
+    .slider {
+        position: relative;
+        width: 100%;
+        height: 500px;
+        overflow: hidden;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .slides {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+        height: 100%;
+    }
+
+    .slide {
+        min-width: 100%;
+        height: 100%;
+    }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+    .nav-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255, 255, 255, 0.7);
+        border: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        font-size: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        z-index: 10;
+    }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-btn.prev {
+            left: 20px;
+        }
+
+        .nav-btn.next {
+            right: 20px;
+        }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .slider {
+            height: 300px;
+        }
+
+        .nav-btn {
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .slider {
+            height: 250px;
+            border-radius: 10px;
+        }
+    }
+
+    /* CSS cho dots  */
+    .slider-dots {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.3); /* Màu đen nhạt */
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .dot.active {
+            background: rgba(0, 0, 0, 0.8); /* Màu đen đậm */
+            transform: scale(1.2);
+        }
+
+        .dot:hover {
+            background: rgba(0, 0, 0, 0.6);
+        }
+</style>

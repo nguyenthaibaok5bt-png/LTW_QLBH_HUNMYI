@@ -1,0 +1,158 @@
+﻿@model LTW_QLBH_HUNMYI.Models.KHACHHANG
+@{
+    ViewBag.Title = "Thông tin tài khoản";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+}
+
+<h2 class="mb-4">
+    <i class="fas fa-user-circle"></i> Thông tin tài khoản
+</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        <i class="fas fa-check-circle"></i> @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show">
+        <i class="fas fa-exclamation-circle"></i> @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row">
+    <!-- Profile Information -->
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="fas fa-user"></i> Thông tin cá nhân</h5>
+            </div>
+            <div class="card-body">
+                @using (Html.BeginForm("UpdateProfile", "Customer", FormMethod.Post, new { @class = "needs-validation" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            <label for="HOTENKH" class="form-label">
+                                Họ tên <span class="text-danger">*</span>
+                            </label>
+                            @Html.TextBoxFor(m => m.HOTENKH, new { @class = "form-control", required = "required" })
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="GIOITINH" class="form-label">Giới tính</label>
+                            @Html.DropDownListFor(m => m.GIOITINH,
+                                new List<SelectListItem> {
+                                    new SelectListItem { Text = "Nam", Value = "Nam" },
+                                    new SelectListItem { Text = "Nữ", Value = "Nữ" }
+                                },
+                                new { @class = "form-select" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="SDT" class="form-label">
+                                Số điện thoại <span class="text-danger">*</span>
+                            </label>
+                            @Html.TextBoxFor(m => m.SDT, new { @class = "form-control", pattern = "[0-9]{10}", required = "required" })
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="EMAIL" class="form-label">
+                                Email <span class="text-danger">*</span>
+                            </label>
+                            @Html.TextBoxFor(m => m.EMAIL, new { @class = "form-control", type = "email", required = "required" })
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="DIACHI" class="form-label">Địa chỉ</label>
+                        @Html.TextBoxFor(m => m.DIACHI, new { @class = "form-control" })
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Ngày đăng ký</label>
+                        <input type="text" class="form-control" value="@Model.NGAYDANGKY" readonly>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Cập nhật thông tin
+                    </button>
+                }
+            </div>
+        </div>
+
+        <!-- Change Password -->
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="fas fa-key"></i> Đổi mật khẩu</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">Để đảm bảo an toàn, vui lòng đổi mật khẩu thường xuyên</p>
+                <a href="@Url.Action("ChangePassword", "Customer")" class="btn btn-outline-primary">
+                    <i class="fas fa-lock"></i> Đổi mật khẩu
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics -->
+    <div class="col-md-4">
+        <!-- Account Stats -->
+        <div class="card mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Thống kê</h5>
+            </div>
+            <div class="card-body">
+                <div class="stats-item mb-3 pb-3 border-bottom">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="fas fa-shopping-bag fa-2x text-primary"></i>
+                        </div>
+                        <div class="text-end">
+                            <h4 class="mb-0">@ViewBag.TotalOrders</h4>
+                            <small class="text-muted">Tổng đơn hàng</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="fas fa-dollar-sign fa-2x text-success"></i>
+                        </div>
+                        <div class="text-end">
+                            <h4 class="mb-0">@String.Format("{0:N0}", ViewBag.TotalSpent)đ</h4>
+                            <small class="text-muted">Tổng chi tiêu</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="fas fa-link"></i> Liên kết nhanh</h5>
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="@Url.Action("Orders", "Customer")" class="list-group-item list-group-item-action">
+                    <i class="fas fa-shopping-bag text-primary"></i> Đơn hàng của tôi
+                </a>
+                <a href="@Url.Action("Products", "Customer")" class="list-group-item list-group-item-action">
+                    <i class="fas fa-box text-success"></i> Sản phẩm
+                </a>
+                <a href="@Url.Action("Cart", "Customer")" class="list-group-item list-group-item-action">
+                    <i class="fas fa-shopping-cart text-warning"></i> Giỏ hàng
+                </a>
+                <a href="@Url.Action("Logout", "Account")" class="list-group-item list-group-item-action text-danger">
+                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

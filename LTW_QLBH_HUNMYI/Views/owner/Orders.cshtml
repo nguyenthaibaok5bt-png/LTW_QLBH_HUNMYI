@@ -1,0 +1,173 @@
+﻿@model IEnumerable<LTW_QLBH_HUNMYI.Models.HOADON_BAN>
+@{
+    Layout = "~/Views/Shared/_LayoutOwner.cshtml";
+}
+
+<!-- 🔍 TÌM THEO MÃ -->
+@using (Html.BeginForm("Orders", "Owner", FormMethod.Get))
+{
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <input type="text"
+                   name="maHD"
+                   class="form-control"
+                   placeholder="Nhập mã hóa đơn..." />
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary">Tìm mã</button>
+        </div>
+    </div>
+}
+
+<!-- 🔽 LỌC THEO TRẠNG THÁI -->
+@using (Html.BeginForm("Orders", "Owner", FormMethod.Get))
+{
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <select name="status" class="form-control">
+                <option value="">-- Chọn trạng thái --</option>
+                <option value="Chờ xử lý" @(Request["status"] == "Chờ xử lý" ? "selected" : "")>
+                    Chờ xử lý
+                </option>
+                <option value="Đang xử lý" @(Request["status"] == "Đang xử lý" ? "selected" : "")>
+                    Đang xử lý
+                </option>
+                <option value="Hoàn thành" @(Request["status"] == "Hoàn thành" ? "selected" : "")>
+                    Hoàn thành
+                </option>
+                <option value="Đã hủy" @(Request["status"] == "Đã hủy" ? "selected" : "")>
+                    Đã hủy
+                </option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-success">Lọc</button>
+            <a href="@Url.Action("Orders","Owner")"
+               class="btn btn-secondary">Tất cả</a>
+        </div>
+    </div>
+}
+
+<!-- Orders Table -->
+<div class="card">
+    <div class="card-body">
+        <table class="table table-hover table-bordered align-middle mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>Mã hóa đơn</th>
+                    <th>Ngày lập</th>
+                    <th>Khách hàng</th>
+                    <th>Tổng tiền</th>
+                    <th>Trạng thái</th>
+                    <th width="120">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">
+                            <i class="fas fa-inbox fa-3x mb-2 d-block"></i>
+                            <span>Không tìm thấy đơn hàng phù hợp</span>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var order in Model)
+                    {
+                        <tr>
+                            <td class="fw-bold">@order.MAHD_BAN</td>
+                            <td>
+                                @if (order.NGAYLAP.HasValue)
+                                {
+                                    <span>@order.NGAYLAP.Value.ToString("dd/MM/yyyy")</span>
+                                    <br />
+                                    <small class="text-muted">@order.NGAYLAP.Value.ToString("HH:mm")</small>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">N/A</span>
+                                }
+                            </td>
+                            <td>
+                                @if (order.KHACHHANG != null)
+                                {
+                                    <span>@order.KHACHHANG.HOTENKH</span>
+                                    <br />
+                                    <small class="text-muted">@order.KHACHHANG.SDT</small>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">N/A</span>
+                                }
+                            </td>
+                            <td class="text-end fw-bold text-success">
+                                @string.Format("{0:N0}", order.TONGTIEN) đ
+                            </td>
+                            <td>
+                                @if (order.TRANGTHAI == "Chờ xử lý")
+                                {
+                                    <span class="badge bg-warning text-dark">
+                                        <i class="fas fa-clock"></i> Chờ xử lý
+                                    </span>
+                                }
+                                else if (order.TRANGTHAI == "Đang xử lý")
+                                {
+                                    <span class="badge bg-primary">
+                                        <i class="fas fa-spinner"></i> Đang xử lý
+                                    </span>
+                                }
+                                else if (order.TRANGTHAI == "Hoàn thành")
+                                {
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-check-circle"></i> Hoàn thành
+                                    </span>
+                                }
+                                else if (order.TRANGTHAI == "Đã hủy")
+                                {
+                                    <span class="badge bg-danger">
+                                        <i class="fas fa-times-circle"></i> Đã hủy
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">@order.TRANGTHAI</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                <a href="@Url.Action("OrderDetails", "Owner", new { id = order.MAHD_BAN })"
+                                   class="btn btn-sm btn-info">
+                                    <i class="fas fa-eye"></i> Xem
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .card {
+        border: none;
+        box-shadow: 0 0 20px rgba(0,0,0,0.08);
+        border-radius: 10px;
+    }
+
+    .badge {
+        padding: 6px 12px;
+        font-weight: 500;
+    }
+
+    .table thead th {
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .form-label {
+        margin-bottom: 0.25rem;
+        font-weight: 500;
+    }
+</style>
